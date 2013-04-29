@@ -70,6 +70,7 @@
 #include <lwip/stats.h>
 #include <lwip/snmp.h>
 #include <lwip/tcpip.h>
+#include <lwip/dhcp.h>
 #include "netif/etharp.h"
 #include "netif/ppp_oe.h"
 
@@ -246,9 +247,18 @@ msg_t lwip_thread(void *p) {
     LWIP_NETMASK(&netmask);
   }
   macStart(&ETHD1, &mac_config);
+
+#if LWIP_DHCP
+  IP4_ADDR(&ip, 0,0,0,0);
+  IP4_ADDR(&netmask, 0,0,0,0);
+  IP4_ADDR(&gateway, 0,0,0,0);
+#endif
   netif_add(&thisif, &ip, &netmask, &gateway, NULL, ethernetif_init, tcpip_input);
 
   netif_set_default(&thisif);
+#if LWIP_DHCP
+  dhcp_start(&thisif);
+#endif
   netif_set_up(&thisif);
 
   /* Setup event sources.*/
