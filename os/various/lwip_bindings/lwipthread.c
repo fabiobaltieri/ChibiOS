@@ -180,7 +180,7 @@ static struct pbuf *low_level_input(struct netif *netif) {
 static err_t ethernetif_init(struct netif *netif) {
 #if LWIP_NETIF_HOSTNAME
   /* Initialize interface hostname */
-  netif->hostname = "lwip";
+  netif->hostname = NETIF_HOSTNAME;
 #endif /* LWIP_NETIF_HOSTNAME */
 
   /*
